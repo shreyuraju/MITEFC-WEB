@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MITE FC ADMIN UpdateAmount</title>
+  </head>
+  <body>
+    <a href="index.html">Home</a>
+    <a href="updateAmount.html">Update</a>
+    <a href="viewUsers.html">Users</a>
+    <a href="viewTransaction.html">Transactions</a><br />
+    <input type="number" id="amount" placeholder="Enter the Amount" required />
+    <button id="submit">Submit</button>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+        child,
+        push,
+        update,
+      } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+
+      
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAacDD6L6X9dsLrQiWehiIEpLhPK7J7I3I",
+        authDomain: "mite-fc.firebaseapp.com",
+        databaseURL:
+          "https://mite-fc-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "mite-fc",
+        storageBucket: "mite-fc.appspot.com",
+        messagingSenderId: "389675299033",
+        appId: "1:389675299033:web:b59fd72c9d8442a4d90ec8",
+        measurementId: "G-HET59T2JMN",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const rtdb = getDatabase(app);
+
+      document.querySelector("#submit").addEventListener("click", () => {
+        const amnt = document.getElementById("amount").value;
+        const num = parseInt(amnt);
+        update(ref(rtdb, "admin/mealsAmt"), {
+          amount: num,
+        });
+      });
+    </script>
+  </body>
+</html>

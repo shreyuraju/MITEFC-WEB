@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Call JavaScript function from form</title>
+  </head>
+  <body>
+    <a href="index.html" >Home</a>
+    <a href="updateAmount.html" >Update</a>
+    <a href="viewUsers.html" >Users</a>
+    <a href="viewTransaction.html" >Transactions</a>
+    <table id="myTable">
+      <thead>
+        <tr>
+          <th>USN</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+        child,
+        push,
+        update,
+        onValue, // added this line
+      } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyAacDD6L6X9dsLrQiWehiIEpLhPK7J7I3I",
+        authDomain: "mite-fc.firebaseapp.com",
+        databaseURL:
+          "https://mite-fc-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "mite-fc",
+        storageBucket: "mite-fc.appspot.com",
+        messagingSenderId: "389675299033",
+        appId: "1:389675299033:web:b59fd72c9d8442a4d90ec8",
+        measurementId: "G-HET59T2JMN",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+
+      const rtdb = getDatabase(app);
+
+      // Get a reference to the "users" node in the database
+      const usersRef = ref(rtdb, "users");
+
+      // Attach a listener to the "value" event to read the data once
+      onValue(usersRef, (snapshot) => {
+        const tableBody = document.querySelector("#myTable tbody");
+
+        // Clear the table
+        tableBody.innerHTML = "";
+
+        // Loop through the child nodes of the snapshot
+        snapshot.forEach((childSnapshot) => {
+          // Get the data for the child node
+          const data = childSnapshot.val();
+          const USN = data.USN;
+          const balance = data.balance;
+
+          // Create a new row in the table
+          const newRow = tableBody.insertRow();
+          // Add the data to the new row
+          const nameCell = newRow.insertCell();
+          nameCell.textContent = USN;
+          const ageCell = newRow.insertCell();
+          ageCell.textContent = balance;
+        });
+      });
+    </script>
+  </body>
+</html>
