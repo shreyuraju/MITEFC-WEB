@@ -4,11 +4,16 @@
     <title>MITE FC ADMIN UpdateAmount</title>
   </head>
   <body>
+    <div id="alerts"></div>
     <a href="index.html">Home</a>
     <a href="updateAmount.html">Update</a>
     <a href="viewUsers.html">Users</a>
+    <a href="tokencount.html">Token Count</a>
     <a href="viewTransaction.html">Transactions</a><br />
-    <input type="number" id="amount" placeholder="Enter the Amount" required />
+
+    <div id="amount"></div>
+
+    <input type="number" id="updateamount" placeholder="Enter the Amount" required />
     <button id="submit">Submit</button>
 
     <script type="module">
@@ -22,9 +27,8 @@
         child,
         push,
         update,
+        onValue,
       } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
-
-      
 
       const firebaseConfig = {
         apiKey: "AIzaSyAacDD6L6X9dsLrQiWehiIEpLhPK7J7I3I",
@@ -44,10 +48,40 @@
       const rtdb = getDatabase(app);
 
       document.querySelector("#submit").addEventListener("click", () => {
-        const amnt = document.getElementById("amount").value;
+        const amnt = document.getElementById("updateamount").value;
         const num = parseInt(amnt);
-        update(ref(rtdb, "admin/mealsAmt"), {
-          amount: num,
+
+        if (num >= 10) {
+          if ((num % 2) == 0) {
+            update(ref(rtdb, "admin/mealsAmt"), {
+              amount: num,
+            });
+          } else {
+            document.getElementById("alerts").innerHTML = "Value sholud multiple of 10";
+            setTimeout(() => {
+              document.getElementById("alerts").innerHTML = "";
+            }, 5000); // 2 second delay
+          }
+        } else {
+          document.getElementById("alerts").innerHTML = "Value sholud Greater than or equal to 10";
+          setTimeout(() => {
+            document.getElementById("alerts").innerHTML = "";
+          }, 5000); // 2 second delay
+        }
+        
+        document.getElementById("updateamount").value = null;
+      });
+
+      const usersRef = ref(rtdb, "admin/mealsAmt");
+
+      // Attach a listener to the "value" event to read the data once
+      onValue(usersRef, (snapshot) => {
+        // Loop through the child nodes of the snapshot
+        snapshot.forEach((childSnapshot) => {
+          // Get the data for the child node
+          //console.log(childSnapshot.val());
+          const amount = childSnapshot.val();
+          document.getElementById("amount").innerHTML = "Meals Amount is : "+amount;
         });
       });
     </script>

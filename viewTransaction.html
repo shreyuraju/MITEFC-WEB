@@ -7,15 +7,16 @@
     <a href="index.html">Home</a>
     <a href="updateAmount.html">Update</a>
     <a href="viewUsers.html">Users</a>
+    <a href="tokencount.html" >Token Count</a>
     <a href="viewTransaction.html">Transactions</a>
     <table id="myTable">
       <thead>
         <tr>
           <th>USN</th>
-          <th>amount</th>
+          <th>utr</th>
           <th>date</th>
           <th>mode</th>
-          <th>utr</th>
+          <th>amount</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -79,18 +80,29 @@
             const utr = data.utr;
 
             // Create a new row in the table
-            const newRow = tableBody.insertRow();
+            const newRow = tableBody.insertRow(0);
             // Add the data to the new row
             const usnCell = newRow.insertCell();
             usnCell.textContent = USN;
-            const amtCell = newRow.insertCell();
-            amtCell.textContent = amount;
-            const dateCell = newRow.insertCell();
-            dateCell.textContent = date;
-            const modeCell = newRow.insertCell();
-            modeCell.textContent = mode;
+
             const utrCell = newRow.insertCell();
             utrCell.textContent = utr;
+
+            const dateCell = newRow.insertCell();
+            dateCell.textContent = date;
+            
+            const modeCell = newRow.insertCell();
+            modeCell.textContent = mode;
+
+            const amtCell = newRow.insertCell();
+            if (mode == "credit") {
+              amtCell.textContent = "+" + amount;
+            } else if (mode == "debit") {
+              amtCell.textContent = "-" + amount;
+            }
+            
+            
+            
           });
         } else {
           alert("Please check your network connection and try again.");

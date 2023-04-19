@@ -12,8 +12,8 @@
     <table id="myTable">
       <thead>
         <tr>
-          <th>USN</th>
-          <th>Balance</th>
+          <th>date</th>
+          <th>Total Count</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -55,7 +55,7 @@
       const rtdb = getDatabase(app);
 
       // Get a reference to the "users" node in the database
-      const usersRef = ref(rtdb, "users");
+      const usersRef = ref(rtdb, "admin/token_count");
 
       // Attach a listener to the "value" event to read the data once
       onValue(usersRef, (snapshot) => {
@@ -66,18 +66,19 @@
 
         // Loop through the child nodes of the snapshot
         snapshot.forEach((childSnapshot) => {
+          //console.log(childSnapshot.val())
           // Get the data for the child node
           const data = childSnapshot.val();
-          const USN = data.USN;
-          const balance = data.balance;
+          const date = data.date;
+          const count = data.token_count;
 
           // Create a new row in the table
           const newRow = tableBody.insertRow();
           // Add the data to the new row
-          const nameCell = newRow.insertCell();
-          nameCell.textContent = USN;
-          const ageCell = newRow.insertCell();
-          ageCell.textContent = balance;
+          const dateCell = newRow.insertCell();
+          dateCell.textContent = date;
+          const countCell = newRow.insertCell();
+          countCell.textContent = count;
         });
       });
     </script>
