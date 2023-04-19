@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sort Table</title>
+  </head>
+  <body>
+    <table id="myTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>John</td>
+          <td>30</td>
+        </tr>
+        <tr>
+          <td>Jane</td>
+          <td>25</td>
+        </tr>
+        <tr>
+          <td>Bob</td>
+          <td>40</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <label for="sort">Sort by:</label>
+    <select id="sort">
+      <option value="name">Name</option>
+      <option value="age">Age</option>
+    </select>
+
+    <script>
+      const table = document.querySelector("#myTable");
+      const rows = table.rows;
+      const sort = document.querySelector("#sort");
+
+      sort.addEventListener("change", () => {
+        const sortBy = sort.value;
+        const sortedRows = Array.from(rows).slice(1).sort((a, b) => {
+          const aValue = a.cells[sortBy === "name" ? 0 : 1].textContent;
+          const bValue = b.cells[sortBy === "name" ? 0 : 1].textContent;
+          return aValue.localeCompare(bValue);
+        });
+        table.tBodies[0].append(...sortedRows);
+      });
+    </script>
+  </body>
+</html>

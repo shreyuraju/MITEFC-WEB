@@ -87,18 +87,50 @@
       // Get a reference to the "users" node in the database
       const usersRef = ref(rtdb, "admin/alltransaction");
 
+      
+      let credit = 0;
+      let debit = 0;
+
       // Attach a listener to the "value" event to read the data once
       onValue(usersRef, (snapshot) => {
         if (isOnline()) {
           const tableBody = document.querySelector("#myTable tbody");
 
+          const rows = tableBody.rows;
+          // Get a reference to the select element
+          const select = document.querySelector("#sort");
+
+          // Attach an event listener to the select element
+          select.addEventListener("change", () => {
+            // Get the selected value
+            const selectedValue = select.value;
+
+            // Get the table body and rows
+            const tableBody = document.querySelector("#myTable tbody");
+            const rows = tableBody.rows;
+
+            // Convert the rows NodeList to an array
+            const rowsArray = Array.from(rows);
+
+            // Sort the rows array based on the selected heading
+            rowsArray.sort((row1, row2) => {
+              const cell1Value = row1.cells[selectedValue].textContent.trim();
+              const cell2Value = row2.cells[selectedValue].textContent.trim();
+
+              return cell1Value.localeCompare(cell2Value);
+            });
+
+            // Append the sorted rows to the table body
+            rowsArray.forEach((row) => {
+              tableBody.appendChild(row);
+            });
+          });
+
           // Clear the table
           tableBody.innerHTML = "";
-          let credit = 0;
-          let debit = 0;
+
           // Loop through the child nodes of the snapshot
           snapshot.forEach((childSnapshot) => {
-            
             // Get the data for the child node
             const data = childSnapshot.val();
             const USN = data.USN;
@@ -132,25 +164,25 @@
               debit += idebit;
               amtCell.textContent = "-" + amount;
             }
-            console.log(credit);
-            console.log(debit);
-
-            const totaltableBody = document.querySelector("#totalTable tbody");
-            // Clear the table
-            totaltableBody.innerHTML = "";
-
-            // Create a new row in the table
-            const newRow1 = totaltableBody.insertRow(0);
-            // Add the data to the new row
-            const creditCell = newRow1.insertCell();
-            creditCell.textContent = credit;
-
-            const debitCell = newRow1.insertCell();
-            debitCell.textContent = debit;
-
-            const totalCell = newRow1.insertCell();
-            totalCell.textContent = credit + debit;
           });
+          console.log(credit);
+          console.log(debit);
+
+          const totaltableBody = document.querySelector("#totalTable tbody");
+          // Clear the table
+          totaltableBody.innerHTML = "";
+
+          // Create a new row in the table
+          const newRow = totaltableBody.insertRow(0);
+          // Add the data to the new row
+          const creditCell = newRow.insertCell();
+          creditCell.textContent = credit;
+
+          const debitCell = newRow.insertCell();
+          debitCell.textContent = debit;
+
+          const totalCell = newRow.insertCell();
+          totalCell.textContent = credit + debit;
         } else {
           alert("Please check your network connection and try again.");
         }
