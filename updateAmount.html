@@ -15,7 +15,8 @@
       <a href="viewTransaction.html">Transactions</a>
     </div>
     <br />
-    <div id="alerts" class="alert"></div>
+
+    <div id="alerts"></div>
     <div id="amount"></div>
 
     <input
@@ -58,26 +59,25 @@
       const rtdb = getDatabase(app);
 
       document.querySelector("#submit").addEventListener("click", () => {
+        const div = document.getElementById("alerts");
         const amnt = document.getElementById("updateamount").value;
         const num = parseInt(amnt);
 
         if (num >= 10) {
-          if (num % 2 == 0) {
+          if (num % 5 == 0) {
             update(ref(rtdb, "admin/mealsAmt"), {
               amount: num,
             });
           } else {
-            document.getElementById("alerts").innerHTML =
-              "Value sholud multiple of 10";
+            div.innerHTML = "Value sholud multiple of 10";
             setTimeout(() => {
-              document.getElementById("alerts").innerHTML = "";
+              div.innerHTML = "";
             }, 5000); // 2 second delay
           }
         } else {
-          document.getElementById("alerts").innerHTML =
-            "Value sholud Greater than or equal to 10";
+          div.innerHTML = "Value should be Greater than or equal to 10";
           setTimeout(() => {
-            document.getElementById("alerts").innerHTML = "";
+            div.innerHTML = "";
           }, 5000); // 2 second delay
         }
 
