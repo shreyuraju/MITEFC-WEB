@@ -23,32 +23,32 @@
       <option value="mode">Mode</option>
       <option value="amount">Amount</option>
     </select>
+    <div class="container" id="container">
+      <table id="myTable">
+        <thead>
+          <tr>
+            <th id="usn">USN</th>
+            <th id="utr">UTR</th>
+            <th id="date">Date</th>
+            <th id="mode">Mode</th>
+            <th id="amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-    <table id="myTable">
-      <thead>
-        <tr>
-          <th id="usn">USN</th>
-          <th id="utr">UTR</th>
-          <th id="date">Date</th>
-          <th id="mode">Mode</th>
-          <th id="amount">Amount</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <br />
-    <table id="totalTable">
-      <thead>
-        <tr>
-          <th>Credited</th>
-          <th>Debited</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
+      <br />
+      <table id="totalTable">
+        <thead>
+          <tr>
+            <th>Credited</th>
+            <th>Debited</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <div id="total"></div>
 
     <script type="module">
@@ -102,7 +102,6 @@
           let debit = 0;
           // Loop through the child nodes of the snapshot
           snapshot.forEach((childSnapshot) => {
-            
             // Get the data for the child node
             const data = childSnapshot.val();
             const USN = data.USN;

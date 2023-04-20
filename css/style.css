@@ -78,6 +78,41 @@ button {
     padding: 5px;
 }
 
+/* aligning tables to center */
+
+.container {
+    padding: 25px;
+    width: fit-content;
+}
+
+/* Table styling */
+
+#myTable, #totalTable {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #myTable td, #myTable th, #totalTable td, #totalTable th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #myTable tr:nth-child(even){background-color: #f2f2f2;}
+  #totalTable tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #myTable tr:hover {background-color: #ddd;}
+  #totalTable tr:hover {background-color: #ddd;}
+  
+  #myTable th, #totalTable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+  }
+
+
 
 /* below css is old nav bar */
 
