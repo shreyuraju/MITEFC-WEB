@@ -16,17 +16,29 @@
     </div>
     <br />
 
-    <div id="alerts"></div>
-    <div id="amount"></div>
-
-    <input
-      type="number"
-      id="updateamount"
-      placeholder="Enter the Amount"
-      required
-    />
-    <button id="submit">Submit</button>
-
+    <div id="alerts" class="alerts"></div>
+    <div id="amount" class="amount"></div>
+    <div class="input-amount">
+      <input
+        type="number"
+        id="updateamount"
+        name="updateamount"
+        placeholder="Enter the Amount"
+        min="1"
+        max="100"
+        list="defaultNumbers"
+        required
+      />
+      <!-- <br/> -->
+      <datalist id="defaultNumbers">
+        <option value="10"></option>
+        <option value="20"></option>
+        <option value="30"></option>
+        <option value="40"></option>
+        <option value="50"></option>
+      </datalist>
+      <button id="submit">Submit</button>
+    </div>
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
@@ -69,16 +81,20 @@
               amount: num,
             });
           } else {
+            div.style.opacity = 1;
             div.innerHTML = "Value sholud multiple of 10";
             setTimeout(() => {
+              div.style.opacity = 0;
               div.innerHTML = "";
-            }, 5000); // 2 second delay
+            }, 3000); // 3 second delay
           }
         } else {
+          div.style.opacity = 1;
           div.innerHTML = "Value should be Greater than or equal to 10";
           setTimeout(() => {
+            div.style.opacity = 0;
             div.innerHTML = "";
-          }, 5000); // 2 second delay
+          }, 3000); // 3 second delay
         }
 
         document.getElementById("updateamount").value = null;
