@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Call JavaScript function from form</title>
+    <title>MITE Transaction</title>
+    <link rel="icon" href="imageassets/logo.jpg" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <a href="index.html">Home</a>
-    <a href="updateAmount.html">Update</a>
-    <a href="viewUsers.html">Users</a>
-    <a href="tokencount.html">Token Count</a>
-    <a href="viewTransaction.html">Transactions</a>
+    <div class="topnav">
+      <a class="active" href="index.html">Home</a>
+      <a href="updateAmount.html">Update</a>
+      <a href="viewUsers.html">Users</a>
+      <a href="tokencount.html">Token Count</a>
+      <a href="viewTransaction.html">Transactions</a>
+    </div>
     <hr />
     <label for="sort">Sort by:</label>
     <select id="sort">
@@ -19,32 +23,38 @@
       <option value="mode">Mode</option>
       <option value="amount">Amount</option>
     </select>
+    <div class="container" id="container">
+      <table id="myTable">
+        <thead>
+          <tr>
+            <th id="usn">USN</th>
+            <th id="utr">UTR</th>
+            <th id="date">Date</th>
+            <th id="mode">Mode</th>
+            <th id="amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" style="text-align: end">Total</td>
+            <td id="all-total"></td>
+          </tr>
+        </tfoot>
+      </table>
 
-    <table id="myTable">
-      <thead>
-        <tr>
-          <th id="usn">USN</th>
-          <th id="utr">UTR</th>
-          <th id="date">Date</th>
-          <th id="mode">Mode</th>
-          <th id="amount">Amount</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <br />
-    <table id="totalTable">
-      <thead>
-        <tr>
-          <th>Credited</th>
-          <th>Debited</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
+      <br />
+      <table id="totalTable">
+        <thead>
+          <tr>
+            <th>Credited</th>
+            <th>Debited</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <div id="total"></div>
 
     <script type="module">
@@ -87,48 +97,15 @@
       // Get a reference to the "users" node in the database
       const usersRef = ref(rtdb, "admin/alltransaction");
 
-      
-      let credit = 0;
-      let debit = 0;
-
       // Attach a listener to the "value" event to read the data once
       onValue(usersRef, (snapshot) => {
         if (isOnline()) {
           const tableBody = document.querySelector("#myTable tbody");
 
-          const rows = tableBody.rows;
-          // Get a reference to the select element
-          const select = document.querySelector("#sort");
-
-          // Attach an event listener to the select element
-          select.addEventListener("change", () => {
-            // Get the selected value
-            const selectedValue = select.value;
-
-            // Get the table body and rows
-            const tableBody = document.querySelector("#myTable tbody");
-            const rows = tableBody.rows;
-
-            // Convert the rows NodeList to an array
-            const rowsArray = Array.from(rows);
-
-            // Sort the rows array based on the selected heading
-            rowsArray.sort((row1, row2) => {
-              const cell1Value = row1.cells[selectedValue].textContent.trim();
-              const cell2Value = row2.cells[selectedValue].textContent.trim();
-
-              return cell1Value.localeCompare(cell2Value);
-            });
-
-            // Append the sorted rows to the table body
-            rowsArray.forEach((row) => {
-              tableBody.appendChild(row);
-            });
-          });
-
           // Clear the table
           tableBody.innerHTML = "";
-
+          let credit = 0;
+          let debit = 0;
           // Loop through the child nodes of the snapshot
           snapshot.forEach((childSnapshot) => {
             // Get the data for the child node
@@ -164,25 +141,43 @@
               debit += idebit;
               amtCell.textContent = "-" + amount;
             }
+
+            console.log(credit);
+            console.log(debit);
+
+            const totaltableBody = document.querySelector("#totalTable tbody");
+            // Clear the table
+            totaltableBody.innerHTML = "";
+
+            // Create a new row in the table
+            const newRow1 = totaltableBody.insertRow(0);
+            // Add the data to the new row
+            const creditCell = newRow1.insertCell();
+            creditCell.textContent = "\u20B9" + credit;
+
+            const debitCell = newRow1.insertCell();
+            debitCell.textContent = "\u20B9" + debit;
+
+            const totalCell = newRow1.insertCell();
+            totalCell.textContent = "\u20B9" + (credit + debit);
           });
-          console.log(credit);
-          console.log(debit);
 
-          const totaltableBody = document.querySelector("#totalTable tbody");
-          // Clear the table
-          totaltableBody.innerHTML = "";
+          const tableFoot = document.querySelector("#myTable");
 
-          // Create a new row in the table
-          const newRow = totaltableBody.insertRow(0);
-          // Add the data to the new row
-          const creditCell = newRow.insertCell();
-          creditCell.textContent = credit;
+          var tFoot = tableFoot.createTFoot();
 
-          const debitCell = newRow.insertCell();
-          debitCell.textContent = debit;
+          const footRow = tableFoot.insertRow(0);
 
-          const totalCell = newRow.insertCell();
-          totalCell.textContent = credit + debit;
+          const totalFootCell = footRow.insertCell();
+          totalFootCell.textContent = "Total :";
+          totalFootCell.colSpan = 4;
+          totalFootCell.style.textAlign = "end";
+
+          const totalFootDataCell = footRow.insertCell();
+          totalFootDataCell.textContent = "\u20B9" + (credit + debit);
+
+          var totalCel = document.getElementById("all-total");
+          totalCel.innerHTML = "\u20B9" + (credit + debit);
         } else {
           alert("Please check your network connection and try again.");
         }

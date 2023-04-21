@@ -37,7 +37,7 @@
         <tbody></tbody>
         <tfoot>
           <tr>
-            <td colspan="4" style="text-align: end;">Total</td>
+            <td colspan="4" style="text-align: end">Total</td>
             <td id="all-total"></td>
           </tr>
         </tfoot>
@@ -153,18 +153,31 @@
             const newRow1 = totaltableBody.insertRow(0);
             // Add the data to the new row
             const creditCell = newRow1.insertCell();
-            creditCell.textContent = "\u20B9"+credit;
+            creditCell.textContent = "\u20B9" + credit;
 
             const debitCell = newRow1.insertCell();
-            debitCell.textContent = "\u20B9"+debit;
+            debitCell.textContent = "\u20B9" + debit;
 
             const totalCell = newRow1.insertCell();
-            totalCell.textContent = "\u20B9"+(credit+debit);
+            totalCell.textContent = "\u20B9" + (credit + debit);
           });
 
-          var totalCel = document.getElementById("all-total");
-          totalCel.innerHTML = "\u20B9"+(credit+debit);
+          const tableFoot = document.querySelector("#myTable");
 
+          var tFoot = tableFoot.createTFoot();
+
+          const footRow = tableFoot.insertRow(0);
+
+          const totalFootCell = footRow.insertCell();
+          totalFootCell.textContent = "Total :";
+          totalFootCell.colSpan = 4;
+          totalFootCell.style.textAlign = "end";
+
+          const totalFootDataCell = footRow.insertCell();
+          totalFootDataCell.textContent = "\u20B9" + (credit + debit);
+
+          var totalCel = document.getElementById("all-total");
+          totalCel.innerHTML = "\u20B9" + (credit + debit);
         } else {
           alert("Please check your network connection and try again.");
         }
