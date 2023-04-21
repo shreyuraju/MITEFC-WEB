@@ -153,17 +153,18 @@
             const newRow1 = totaltableBody.insertRow(0);
             // Add the data to the new row
             const creditCell = newRow1.insertCell();
-            creditCell.textContent = credit;
+            creditCell.textContent = "\u20B9"+credit;
 
             const debitCell = newRow1.insertCell();
-            debitCell.textContent = debit;
+            debitCell.textContent = "\u20B9"+debit;
 
             const totalCell = newRow1.insertCell();
-            totalCell.textContent = credit + debit;
+            totalCell.textContent = "\u20B9"+(credit+debit);
           });
+
           var totalCel = document.getElementById("all-total");
           totalCel.innerHTML = "\u20B9"+(credit+debit);
-          
+
         } else {
           alert("Please check your network connection and try again.");
         }
